@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('code-generator-ui::layouts.app')
 
 @section('content')
 
@@ -22,7 +22,7 @@
                     <a href="{{ route('generator_tables.generator_table.create') }}" class="btn btn-success" title="Ajouter Generator Table">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </a>
-                    
+
                     <a href="{{ route('generator_tables.generator_table.edit', $generatorTable->id ) }}" class="btn btn-primary" title="Modifier Generator Table">
                         <span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
                     </a>

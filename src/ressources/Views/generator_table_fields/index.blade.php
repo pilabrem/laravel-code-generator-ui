@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('code-generator-ui::layouts.app')
 
 @section('content')
 
