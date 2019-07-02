@@ -111,8 +111,13 @@
 
     <!-- Scripts -->
 
-    <script src="{{asset('js/jquery-1.12.4.min.js')}}"></script>
-    <script src="{{asset('js/jquery.validate.min.js')}}"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+        integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.15.0/jquery.validate.min.js"></script>
+
+    {{-- <script src="{{asset('js/jquery-1.12.4.min.js')}}"></script> --}}
+    {{-- <script src="{{asset('js/jquery.validate.min.js')}}"></script> --}}
     {{-- <script src="{{ asset('js/app.js') }}"></script> --}}
     <script type="text/javascript">
         $(function(){
