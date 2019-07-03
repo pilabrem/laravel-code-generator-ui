@@ -67,11 +67,16 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     After visiting the link, you can click on the plus and green button at the top to add a table model.
     In this form, you should fill:
     - Model name
+
+        Use Camel Case for Model Name
     - Table name (optional)
+
+        Use Snake Case for table name
     - Generate migrations (optional)
     - Generate with form request (optional)
     - Generate with soft delete (optional)
     - Translations (optional)
+
         Exemples: en,fr
     - Primary key if the primary key is not the id attribute (optional)
 
@@ -85,22 +90,27 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     - Enter attribute labels (optional)
     - Enter attribute placeholder (optional)
     - Enter attribute laravel validation (optional)
+
         Example: required
     - Enter attribute Html Type (default: text)
     - Enter attribute database data type (default: string)
     - Enter attribute Data Type Params (optional)
+
         Examples: 
         - varchar(20) ==> 20
         - double(20,2) ==> 20,2 
     - Enter attribute Options for select, radio, checkbox, ... (optional)
+
         Example: Male|Female
     - Enter attribute Date format (optional)
+    
         Example: Y-m-d
     - Enter attribute Html Value (optional)
     - Enter attribute CSS class (optional)
     - Enter attribute Data value (optional)
 
     > PS: It's not allowed to use one of the following symbols in input:
+
         ```
         ; : ,
         ```
