@@ -103,7 +103,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 
         Example: Male|Female
     - Enter attribute Date format (optional)
-    
+
         Example: Y-m-d
     - Enter attribute Html Value (optional)
     - Enter attribute CSS class (optional)
@@ -111,6 +111,5 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 
     > PS: It's not allowed to use one of the following symbols in input:
 
-        ```
         ; : ,
-        ```
+        
