@@ -61,44 +61,46 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 ## Usages
 
 1. Manage tables models
-To manage your tables models, access to [yourHost/code-generator-ui/table](http://127.0.0.1:8000/code-generator-ui/table).
 
-After visiting the link, you can click on the plus and green button at the top to add a table model.
-In this form, you should fill:
-- Model name
-- Table name (optional)
-- Generate migrations (optional)
-- Generate with form request (optional)
-- Generate with soft delete (optional)
-- Translations (optional)
-    Exemples: en,fr
-- Primary key if the primary key is not the id attribute (optional)
+    To manage your tables models, access to [yourHost/code-generator-ui/table](http://127.0.0.1:8000/code-generator-ui/table).
+
+    After visiting the link, you can click on the plus and green button at the top to add a table model.
+    In this form, you should fill:
+    - Model name
+    - Table name (optional)
+    - Generate migrations (optional)
+    - Generate with form request (optional)
+    - Generate with soft delete (optional)
+    - Translations (optional)
+        Exemples: en,fr
+    - Primary key if the primary key is not the id attribute (optional)
 
 2. Manage tables models attributes
-To manage tables models attributes, you must click on the view details button corresponding to the table model.
-After that, you will see all attributes of the table model. To add one, click on the plus and green button.
 
-Attribute properties:
-- Enter attribute name
-- Enter attribute labels (optional)
-- Enter attribute placeholder (optional)
-- Enter attribute laravel validation (optional)
-    Example: required
-- Enter attribute Html Type (default: text)
-- Enter attribute database data type (default: string)
-- Enter attribute Data Type Params (optional)
-    Examples: 
-    - varchar(20) ==> 20
-    - double(20,2) ==> 20,2 
-- Enter attribute Options for select, radio, checkbox, ... (optional)
-    Example: Male|Female
-- Enter attribute Date format (optional)
-    Example: Y-m-d
-- Enter attribute Html Value (optional)
-- Enter attribute CSS class (optional)
-- Enter attribute Data value (optional)
+    To manage tables models attributes, you must click on the view details button corresponding to the table model.
+    After that, you will see all attributes of the table model. To add one, click on the plus and green button.
 
-> PS: It's not allowed to use one of the following symbols in input:
-    ```
-    ; : ,
-    ```
+    Attribute properties:
+    - Enter attribute name
+    - Enter attribute labels (optional)
+    - Enter attribute placeholder (optional)
+    - Enter attribute laravel validation (optional)
+        Example: required
+    - Enter attribute Html Type (default: text)
+    - Enter attribute database data type (default: string)
+    - Enter attribute Data Type Params (optional)
+        Examples: 
+        - varchar(20) ==> 20
+        - double(20,2) ==> 20,2 
+    - Enter attribute Options for select, radio, checkbox, ... (optional)
+        Example: Male|Female
+    - Enter attribute Date format (optional)
+        Example: Y-m-d
+    - Enter attribute Html Value (optional)
+    - Enter attribute CSS class (optional)
+    - Enter attribute Data value (optional)
+
+    > PS: It's not allowed to use one of the following symbols in input:
+        ```
+        ; : ,
+        ```
