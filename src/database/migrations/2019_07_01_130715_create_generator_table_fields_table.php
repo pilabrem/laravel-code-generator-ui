@@ -41,7 +41,9 @@ class CreateGeneratorTableFieldsTable extends Migration
             $table->boolean('is_nullable')->nullable();
             $table->boolean('is_unsigned')->nullable();
             $table->integer('generator_table_id')->unsigned()->nullable()->index();
-
+            $table->foreign('generator_table_id')
+                ->references('id')->on('generator_tables')
+                ->onDelete('cascade');
         });
     }
 
