@@ -64,7 +64,7 @@ class GeneratorTableFieldsController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        //try {
 
             $data = $this->getData($request);
 
@@ -72,11 +72,11 @@ class GeneratorTableFieldsController extends Controller
 
             return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $field->generator_table_id])
                 ->with('success_message', 'Le champ a été ajouté avec succès');
-        } catch (Exception $exception) {
+        /* } catch (Exception $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+        } */
     }
 
     /**
@@ -251,7 +251,7 @@ class GeneratorTableFieldsController extends Controller
             'data_type' => 'nullable',
             'data_type_params' => 'string|min:1|nullable',
             'data_value' => 'string|min:1|nullable',
-            'date_format' => 'date_format:j/n/Y|nullable',
+            'date_format' => 'string|min:1|nullable',
             'placeholder' => 'string|min:1|nullable',
             'is_inline_options' => 'boolean|nullable',
             'is_on_index' => 'boolean|nullable',

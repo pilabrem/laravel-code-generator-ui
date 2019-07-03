@@ -26,7 +26,7 @@ class CreateGeneratorTableFieldsTable extends Migration
             $table->string('data_type')->nullable();
             $table->string('data_type_params')->nullable();
             $table->string('data_value')->nullable();
-            $table->date('date_format')->nullable();
+            $table->string('date_format')->nullable();
             $table->string('placeholder')->nullable();
             $table->boolean('is_inline_options')->nullable();
             $table->boolean('is_on_index')->nullable();
