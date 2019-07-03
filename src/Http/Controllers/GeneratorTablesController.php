@@ -4,6 +4,7 @@ namespace Pilabrem\CodeGeneratorUI\Http\Controllers;
 
 use Illuminate\Routing\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Artisan;
 use Exception;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTable;
 
@@ -134,6 +135,80 @@ class GeneratorTablesController extends Controller
     }
 
 
+
+    public function generateConfig()
+    {
+        $tables = GeneratorTable::all();
+
+        foreach ($tables as $table) {
+            //$table = GeneratorTable::findOrFail($table_id);
+            $fields = $table->generatorTableFields;
+            $cmd = 'resource-file:create ' . $table->name . ' ';
+
+            // Getting fields parameter
+            $fieldsParams = "";
+            foreach ($fields as $field) {
+                $fieldArray = $field->toArray();
+                $excludeFields = ['id', 'created_at', 'updated_at', 'generator_table_id'];
+
+                foreach ($fieldArray as $key => $value) {
+                    if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
+                        // Si le paramètre contient un is_ au départ c'est un boolean
+                        if (!(strpos($key, 'is_') !== false)) {
+                            $param = str_replace('_', '-', $key) . ':' . $value;
+                            $fieldsParams .= $param . ';';
+                        }
+                    }
+                }
+                $fieldsParams .= ',';
+            }
+
+            // Add --fields param
+            $cmd .= ' --fields="' . $fieldsParams . '" --force';
+            $output = [];
+            $exitCode = Artisan::call($cmd, [], $output);
+        }
+
+        return back()->with('success_message', 'Fichiers de configurations générés avec succès');
+    }
+
+    public function generateResources()
+    {
+        $tables = GeneratorTable::all();
+        $globalCmd = "";
+
+        foreach ($tables as $table) {
+            //$table = GeneratorTable::findOrFail($table_id);
+
+            $cmd = 'create:scaffold ' . $table->name . ' ';
+
+            $tableArray = $table->toArray();
+            $excludeFields = ['id', 'created_at', 'updated_at', 'name'];
+
+            // Commande without --fields parameter
+            foreach ($tableArray as $key => $value) {
+                if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
+                    if (strpos($key, 'with_') !== false) {
+                        if ($value == 1) {
+                            $param = '--' . str_replace('_', '-', $key);
+                            $cmd .= $param . ' ';
+                        }
+                    } else {
+                        $param = '--' . str_replace('_', '-', $key) . '=' . $value;
+                        $cmd .= $param . ' ';
+                    }
+                }
+            }
+
+            $cmd .= ' --force <br>';
+            $globalCmd .= 'php artisan ' . $cmd;
+        }
+        return back()
+            ->with('success_message', 'Veuillez exécuter le(s) commande(s) suivante(s) dans le dossier du projet')
+            ->with('cmd', $globalCmd);
+    }
+
+
     /**
      * Get the request's data from the request.
      *
@@ -143,7 +218,7 @@ class GeneratorTablesController extends Controller
     protected function getData(Request $request)
     {
         $rules = [
-                'name' => 'string|min:1|max:255|required',
+            'name' => 'string|min:1|max:255|required',
             'table_name' => 'string|min:1|nullable',
             'with_migration' => 'boolean|nullable',
             'with_form_request' => 'boolean|nullable',
@@ -161,5 +236,4 @@ class GeneratorTablesController extends Controller
 
         return $data;
     }
-
 }

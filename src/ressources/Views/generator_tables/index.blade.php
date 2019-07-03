@@ -14,6 +14,12 @@
         </div>
     @endif
 
+    @if(Session::has('cmd'))
+        <div class="alert alert-warning">
+            {!! session('cmd') !!}
+        </div>
+    @endif
+
     <div class="panel panel-default">
 
         <div class="panel-heading clearfix">
@@ -23,8 +29,14 @@
             </div>
 
             <div class="btn-group btn-group-sm pull-right" role="group">
-                <a href="{{ route('generator_tables.generator_table.create') }}" class="btn btn-success" title="Ajouter Generator Table">
+                <a href="{{ route('generator_tables.generator_table.create') }}" class="btn btn-success" title="Ajouter Table">
                     <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                </a>
+                <a href="{{ route('generator_tables.generator_table.config') }}" class="btn btn-warning" title="Générer configurations">
+                    <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
+                </a>
+                <a href="{{ route('generator_tables.generator_table.resources') }}" class="btn btn-danger" title="Générer ressources">
+                    <span class="glyphicon glyphicon-flash" aria-hidden="true"></span>
                 </a>
             </div>
 

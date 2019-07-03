@@ -54,5 +54,10 @@ Route::group([
          ->name('generator_table_fields.generator_table_field.config');
     Route::get('/resources/{table}','GeneratorTableFieldsController@generateResources')
          ->name('generator_table_fields.generator_table_field.resources');
+
+    Route::get('/config', 'GeneratorTablesController@generateConfig')
+        ->name('generator_tables.generator_table.config');
+    Route::get('/resources','GeneratorTablesController@generateResources')
+        ->name('generator_tables.generator_table.resources');
 });
 

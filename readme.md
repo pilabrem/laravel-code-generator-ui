@@ -48,16 +48,23 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 	php artisan create:layout "Your project name"
 	```
  
-4. **(You may skip this step when using Laravel >= 5.5)** To bootstrap the packages into your project while using command-line only, open the app/Providers/AppServiceProvider.php file in your project. Then, add the following code to the register() method.
+3. **(You may skip this step when using Laravel >= 5.5)** To bootstrap the packages into your project while using command-line only, open the app/Providers/AppServiceProvider.php file in your project. Then, add the following code to the register() method.
 
 	Add the following line to bootstrap laravel-code-generator to the framework.
 
 	```
 	if ($this->app->runningInConsole()) {
+	    $this->app->register('CrestApps\CodeGenerator\CodeGeneratorServiceProvider');
 	    $this->app->register('Pilabrem\CodeGeneratorUI\CodeGeneratorUiServiceProvider');
 	}
 	```
 
+5. Now, you can migrate database
+
+	```
+	php artisan migrate
+	```
+ 
 ## Usages
 
 1. Manage tables models
