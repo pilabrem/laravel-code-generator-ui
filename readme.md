@@ -47,4 +47,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 	```
 
 ## Usages
+
 To manage your tables models, access to [yourHost/code-generator-ui/table](http://127.0.0.1:8000/code-generator-ui/table).
+
+After visiting the link, you click on the plus and green button at the top to add a table model.
