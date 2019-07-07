@@ -1,4 +1,5 @@
 
+# Laravel code generator ui
 
 ## Introduction
 
@@ -37,14 +38,8 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 	```
 	composer require pilabrem/laravel-code-generator-ui --dev
 	```
- 
-2. To download the required package into your laravel project, use the command-line to execute the following command
 
-	```
-	composer require crestapps/laravel-code-generator:v2.3.x-dev --dev
-	```
-
-3. If don't have a layout, you can create one for your project with this command
+2. If don't have a layout, you can create one for your project with this command
 
 	```
 	php artisan create:layout "Your project name"
@@ -55,13 +50,11 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 	Add the following line to bootstrap laravel-code-generator to the framework.
 
 	```
-	if ($this->app->runningInConsole()) {
 	    $this->app->register('CrestApps\CodeGenerator\CodeGeneratorServiceProvider');
 	    $this->app->register('Pilabrem\CodeGeneratorUI\CodeGeneratorUiServiceProvider');
-	}
 	```
 
-5. Now, you can migrate database
+4. Now, you can migrate database
 
 	```
 	php artisan migrate
@@ -118,7 +111,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     - Enter attribute CSS class (optional)
     - Enter attribute Data value (optional)
 
-    >> PS: It's not allowed to use one of the following symbols in input:
+    > PS: It's not allowed to use one of the following symbols in input:
 
         ; : ,
         

@@ -140,17 +140,19 @@ class GeneratorTablesController extends Controller
      */
     public function destroy($id)
     {
-            $generatorTable = GeneratorTable::findOrFail($id);
+        $generatorTable = GeneratorTable::findOrFail($id);
+        $cmd = "resource-file:delete " . $generatorTable->name;
+        // Delete Table Model
+        $generatorTable->delete();
 
+        try {
             // Delete resource file
             Config::set("laravel-code-generator.resource_file_path", "../resources/laravel-code-generator/sources");
-            Artisan::call("resource-file:delete " . $generatorTable->name);
-
-            // Delete Table Model
-            $generatorTable->delete();
-
+            Artisan::call($cmd);
+        } catch (Exception $exception) { } finally {
             return redirect()->route('generator_tables.generator_table.index')
                 ->with('success_message', 'Table model deleted!');
+        }
     }
 
     /**
