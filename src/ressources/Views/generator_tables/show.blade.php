@@ -6,7 +6,11 @@
     <div class="panel-heading clearfix">
 
         <span class="pull-left">
-            <h4 class="mt-5 mb-5">{{ isset($generatorTable->name) ? $generatorTable->name : 'Generator Table' }}</h4>
+            <h4 class="mt-5 mb-5">
+                <a href="{{route('generator_tables.generator_table.index')}}">Tables </a>
+                <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i>
+                {{ isset($generatorTable->name) ? $generatorTable->name : 'Generator Table' }}
+            </h4>
         </span>
 
         <div class="pull-right">

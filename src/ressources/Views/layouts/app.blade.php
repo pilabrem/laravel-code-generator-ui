@@ -17,7 +17,7 @@
 
     <style>
         body {
-            padding-top: 65px;
+            padding-top: 25px;
             padding-bottom: 20px;
         }
 
@@ -65,13 +65,22 @@
         .mb-5 {
             margin-bottom: 5px !important;
         }
+
+        label.required::after, th.required::after {
+            color: red;
+            content: " *";
+        }
+
+        .one-line {
+            margin-left: 10px;
+        }
     </style>
 
 </head>
 
 <body>
 
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    {{-- <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
@@ -84,26 +93,8 @@
                 <a href="{{route('generator_tables.generator_table.index')}}" class="navbar-brand">Code
                     Generator UI</a>
             </div>
-            {{-- <div id="navbar" class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="{!! url('/') !!}">Home</a></li>
-                </ul>
-
-                @if (Route::has('login'))
-                <ul class="nav navbar-nav navbar-right">
-                    @if (Auth::check())
-                    <li><a href="{{ url('/home') }}">Home</a></li>
-            @else
-            <li><a href="{{ url('/login') }}">Login</a></li>
-            <li><a href="{{ url('/register') }}">Register</a></li>
-            @endif
-            </ul>
-            @endif
-
-        </div> --}}
-        <!--/.nav-collapse -->
         </div>
-    </nav>
+    </nav> --}}
 
     <div class="container body-content">
         @yield('content')
@@ -184,6 +175,8 @@
 
         });
     </script>
+
+    @yield('script')
 
 </body>
 

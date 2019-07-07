@@ -1,11 +1,22 @@
 {
     "name": "pilabrem/laravel-code-generator-ui",
     "description": "User interface to help developpers with laravel-code-generator commands",
+    "keywords": [
+        "laravel","crud","crud generator",
+        "laravel crud generator","laravel crud builder",
+        "crud builder","views creator","routes creator",
+        "controller creator","code generator","generators","generator",
+        "laravel crud","laravel code generator", "generator ui",
+        "code generator ui", "laravel code generator ui",
+        "laravel-code-generator","code-generator","CrestApps",
+        "Alhayek", "Mike Alhayek","Majd Alhayek", "pilabre", "Mikaila",
+        "Pilabre Mikaila", "pilabrem",
+    ],
     "require": {
 
     },
     "require-dev": {
-        "crestapps/laravel-code-generator": "^2.3"
+        "crestapps/laravel-code-generator": "v2.3.x-dev"
     },
     "autoload": {
         "psr-4": {
@@ -19,7 +30,6 @@
             "email": "pilabrem@gmail.com"
         }
     ],
-    "minimum-stability": "stable",
 
     "extra": {
         "laravel": {

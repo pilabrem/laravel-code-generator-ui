@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Artisan;
 use Exception;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTable;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTableField;
+use Illuminate\Support\Facades\Config;
+use Symfony\Component\Console\Output\Output;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class GeneratorTableFieldsController extends Controller
 {
@@ -64,19 +67,11 @@ class GeneratorTableFieldsController extends Controller
      */
     public function store(Request $request)
     {
-        //try {
+        $data = $this->getData($request);
+        $field = GeneratorTableField::create($data);
 
-            $data = $this->getData($request);
-
-            $field = GeneratorTableField::create($data);
-
-            return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $field->generator_table_id])
-                ->with('success_message', 'Le champ a été ajouté avec succès');
-        /* } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        } */
+        return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $field->generator_table_id])
+            ->with('success_message', 'Field added successfully');
     }
 
     /**
@@ -125,20 +120,13 @@ class GeneratorTableFieldsController extends Controller
      */
     public function update($id, Request $request)
     {
-        try {
+        $data = $this->getData($request);
 
-            $data = $this->getData($request);
+        $generatorTableField = GeneratorTableField::findOrFail($id);
+        $generatorTableField->update($data);
 
-            $generatorTableField = GeneratorTableField::findOrFail($id);
-            $generatorTableField->update($data);
-
-            return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $generatorTableField->generator_table_id])
-                ->with('success_message', 'Le champ a été modifié avec succès!');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+        return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $generatorTableField->generator_table_id])
+            ->with('success_message', 'Field updated successfully!');
     }
 
     /**
@@ -150,22 +138,17 @@ class GeneratorTableFieldsController extends Controller
      */
     public function destroy($id)
     {
-        try {
-            $generatorTableField = GeneratorTableField::findOrFail($id);
-            $tableId = $generatorTableField->generator_table_id;
-            $generatorTableField->delete();
+        $generatorTableField = GeneratorTableField::findOrFail($id);
+        $tableId = $generatorTableField->generator_table_id;
+        $generatorTableField->delete();
 
-            return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $tableId])
-                ->with('success_message', 'Le champ a été supprimé avec succès!');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+        return redirect()->route('generator_table_fields.generator_table_field.index', ['table' => $tableId])
+            ->with('success_message', 'Field removed from table model!');
     }
 
-
-
+    /**
+     * Generate table model resource file
+     */
     public function generateConfig(int $table_id)
     {
         $table = GeneratorTable::findOrFail($table_id);
@@ -173,17 +156,22 @@ class GeneratorTableFieldsController extends Controller
         $cmd = 'resource-file:create ' . $table->name . ' ';
 
         // Getting fields parameter
-        $fieldsParams = "";
+        $fieldsParams = "id,";      // id primary key alway exist
+
         foreach ($fields as $field) {
             $fieldArray = $field->toArray();
             $excludeFields = ['id', 'created_at', 'updated_at', 'generator_table_id'];
 
-            foreach ($fieldArray as $key => $value) {
-                if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
-                    // Si le paramètre contient un is_ au départ c'est un boolean
-                    if (!(strpos($key, 'is_') !== false)) {
-                        $param = str_replace('_', '-', $key) . ':' . $value;
-                        $fieldsParams .= $param . ';';
+            if (strpos($field->name, '_id') !== false) {
+                $fieldsParams .= $field->name;
+            } else {
+                foreach ($fieldArray as $key => $value) {
+                    if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
+                        // Si le paramètre contient un is_ au départ c'est un boolean
+                        if (!(strpos($key, 'is_') !== false)) {
+                            $param = str_replace('_', '-', $key) . ':' . $value;
+                            $fieldsParams .= $param . ';';
+                        }
                     }
                 }
             }
@@ -191,14 +179,17 @@ class GeneratorTableFieldsController extends Controller
         }
 
         // Add --fields param
-        $cmd .= ' --fields="'. $fieldsParams .'" --force';
+        $cmd .= ' --fields="' . $fieldsParams . '" --force';
         $output = [];
         $exitCode = Artisan::call($cmd, [], $output);
 
-        return back()->with('success_message', 'Fichier de configuration généré avec succès');
+        return back()->with('success_message', 'Resource file created successfully');
     }
 
-    public function generateResources(int $table_id)
+    /**
+     * Scaffold Table model files
+     */
+    public function generateResources(int $table_id, Request $request)
     {
         $table = GeneratorTable::findOrFail($table_id);
 
@@ -207,7 +198,7 @@ class GeneratorTableFieldsController extends Controller
         $tableArray = $table->toArray();
         $excludeFields = ['id', 'created_at', 'updated_at', 'name'];
 
-        // Commande without --fields parameter
+        // Command without --fields parameter
         foreach ($tableArray as $key => $value) {
             if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
                 if (strpos($key, 'with_') !== false) {
@@ -223,11 +214,15 @@ class GeneratorTableFieldsController extends Controller
         }
 
         $cmd .= ' --force';
-        $output = "";
-        //$exitCode = Artisan::call($cmd, [], $output);
-        return back()
-                ->with('success_message', 'Veuillez exécuter la commande suivante dans le dossier du projet')
-                ->with('cmd', 'php artisan '.$cmd);
+
+        Config::set("laravel-code-generator.resource_file_path", "../resources/laravel-code-generator/sources");
+        Artisan::call($cmd);
+
+        if (isset($request->option) && $request->option == "migrate") {
+            Artisan::call("migrate");
+        }
+
+        return back()->with('success_message', 'Table model Scaffolded' );
     }
 
 
@@ -269,19 +264,6 @@ class GeneratorTableFieldsController extends Controller
         ];
 
         $data = $request->validate($rules);
-
-        $data['is_inline_options'] = $request->has('is_inline_options');
-        $data['is_on_index'] = $request->has('is_on_index');
-        $data['is_on_form'] = $request->has('is_on_form');
-        $data['is_on_show'] = $request->has('is_on_show');
-        $data['is_on_views'] = $request->has('is_on_views');
-        $data['is_header'] = $request->has('is_header');
-        $data['is_auto_increment'] = $request->has('is_auto_increment');
-        $data['is_primary'] = $request->has('is_primary');
-        $data['is_index'] = $request->has('is_index');
-        $data['is_unique'] = $request->has('is_unique');
-        $data['is_nullable'] = $request->has('is_nullable');
-        $data['is_unsigned'] = $request->has('is_unsigned');
 
         return $data;
     }

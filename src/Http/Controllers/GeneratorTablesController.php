@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Exception;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTable;
+use CrestApps\CodeGenerator\Models\Field;
+use Pilabrem\CodeGeneratorUI\Models\GeneratorTableField;
+use Illuminate\Support\Facades\Config;
 
 class GeneratorTablesController extends Controller
 {
@@ -33,6 +36,34 @@ class GeneratorTablesController extends Controller
         return view('code-generator-ui::generator_tables.create');
     }
 
+
+
+    public function saveNewFields(int $table_id, Request $request)
+    {
+        $nbField = count($request['field_name']);
+
+        for ($i = 0; $i < $nbField; $i++) {
+            $field = null;
+            if (isset($request['id'][$i])) {
+                $id = $request['id'][$i];
+                $field = GeneratorTableField::findOrFail($id);
+            } else {
+                $field = new GeneratorTableField();
+            }
+            $field->name = $request['field_name'][$i];
+            $field->labels = $request['labels'][$i];
+            $field->validation = $request['validation'][$i];
+            $field->html_type = $request['html_type'][$i];
+            $field->options = $request['options'][$i];
+            $field->data_type = $request['data_type'][$i];
+            $field->data_type_params = $request['data_type_params'][$i];
+            $field->date_format = $request['date_format'][$i];
+            $field->placeholder = $request['placeholder'][$i];
+            $field->generator_table_id = $table_id;
+            $field->save();
+        }
+    }
+
     /**
      * Store a new generator table in the storage.
      *
@@ -42,19 +73,13 @@ class GeneratorTablesController extends Controller
      */
     public function store(Request $request)
     {
-        try {
+        $data = $this->getData($request);
+        $table = GeneratorTable::create($data);
 
-            $data = $this->getData($request);
+        $this->saveNewFields($table->id, $request);
 
-            GeneratorTable::create($data);
-
-            return redirect()->route('generator_tables.generator_table.index')
-                ->with('success_message', 'La Table a été ajoutée avec succès');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+        return redirect()->route('generator_tables.generator_table.index')
+            ->with('success_message', 'Table Model saved');
     }
 
     /**
@@ -81,9 +106,9 @@ class GeneratorTablesController extends Controller
     public function edit($id)
     {
         $generatorTable = GeneratorTable::findOrFail($id);
+        $generatorTableFields = $generatorTable->generatorTableFields;
 
-
-        return view('code-generator-ui::generator_tables.edit', compact('generatorTable'));
+        return view('code-generator-ui::generator_tables.edit', compact('generatorTable', 'generatorTableFields'));
     }
 
     /**
@@ -96,20 +121,14 @@ class GeneratorTablesController extends Controller
      */
     public function update($id, Request $request)
     {
-        try {
+        $data = $this->getData($request);
+        $generatorTable = GeneratorTable::findOrFail($id);
+        $generatorTable->update($data);
 
-            $data = $this->getData($request);
+        $this->saveNewFields($generatorTable->id, $request);
 
-            $generatorTable = GeneratorTable::findOrFail($id);
-            $generatorTable->update($data);
-
-            return redirect()->route('generator_tables.generator_table.index')
-                ->with('success_message', 'La Table a été modifiée avec succès!');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+        return redirect()->route('generator_tables.generator_table.index')
+            ->with('success_message', 'Table model updated successfully!');
     }
 
     /**
@@ -121,71 +140,79 @@ class GeneratorTablesController extends Controller
      */
     public function destroy($id)
     {
-        try {
             $generatorTable = GeneratorTable::findOrFail($id);
+
+            // Delete resource file
+            Config::set("laravel-code-generator.resource_file_path", "../resources/laravel-code-generator/sources");
+            Artisan::call("resource-file:delete " . $generatorTable->name);
+
+            // Delete Table Model
             $generatorTable->delete();
 
             return redirect()->route('generator_tables.generator_table.index')
-                ->with('success_message', 'La Table a été supprimé avec succès!');
-        } catch (Exception $exception) {
-
-            return back()->withInput()
-                ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }
+                ->with('success_message', 'Table model deleted!');
     }
 
-
-
+    /**
+     *      Generate resource file
+     */
     public function generateConfig()
     {
         $tables = GeneratorTable::all();
 
         foreach ($tables as $table) {
-            //$table = GeneratorTable::findOrFail($table_id);
+            // For Each table model
             $fields = $table->generatorTableFields;
             $cmd = 'resource-file:create ' . $table->name . ' ';
 
             // Getting fields parameter
             $fieldsParams = "";
+            if (!isset($table->primary_key)) {
+                $fieldsParams = "id,";
+            }
+
             foreach ($fields as $field) {
                 $fieldArray = $field->toArray();
                 $excludeFields = ['id', 'created_at', 'updated_at', 'generator_table_id'];
 
-                foreach ($fieldArray as $key => $value) {
-                    if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
-                        // Si le paramètre contient un is_ au départ c'est un boolean
-                        if (!(strpos($key, 'is_') !== false)) {
-                            $param = str_replace('_', '-', $key) . ':' . $value;
-                            $fieldsParams .= $param . ';';
+                if (strpos($field->name, '_id') !== false) {
+                    $fieldsParams .= $field->name;
+                } else {
+                    foreach ($fieldArray as $key => $value) {
+                        if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
+                            // Si le paramètre contient un is_ au départ c'est un boolean
+                            if (!(strpos($key, 'is_') !== false)) {
+                                $param = str_replace('_', '-', $key) . ':' . $value;
+                                $fieldsParams .= $param . ';';
+                            }
                         }
                     }
                 }
                 $fieldsParams .= ',';
             }
-
             // Add --fields param
             $cmd .= ' --fields="' . $fieldsParams . '" --force';
             $output = [];
             $exitCode = Artisan::call($cmd, [], $output);
         }
 
-        return back()->with('success_message', 'Fichiers de configurations générés avec succès');
+        return back()->with('success_message', 'Resources files created successfully');
     }
 
-    public function generateResources()
+    /**
+     *      Scaffold app files
+     */
+    public function generateResources(Request $request)
     {
         $tables = GeneratorTable::all();
-        $globalCmd = "";
 
         foreach ($tables as $table) {
-            //$table = GeneratorTable::findOrFail($table_id);
-
+            // For Each table model
             $cmd = 'create:scaffold ' . $table->name . ' ';
-
             $tableArray = $table->toArray();
             $excludeFields = ['id', 'created_at', 'updated_at', 'name'];
 
-            // Commande without --fields parameter
+            // Command
             foreach ($tableArray as $key => $value) {
                 if (!is_array($value) && isset($value) && !in_array($key, $excludeFields)) {
                     if (strpos($key, 'with_') !== false) {
@@ -200,14 +227,19 @@ class GeneratorTablesController extends Controller
                 }
             }
 
-            $cmd .= ' --force <br>';
-            $globalCmd .= 'php artisan ' . $cmd;
-        }
-        return back()
-            ->with('success_message', 'Veuillez exécuter le(s) commande(s) suivante(s) dans le dossier du projet')
-            ->with('cmd', $globalCmd);
-    }
+            $cmd .= ' --force';
 
+            Config::set("laravel-code-generator.resource_file_path", "../resources/laravel-code-generator/sources");
+            Artisan::call($cmd);
+        }
+
+        if (isset($request->option) && $request->option == "migrate") {
+            Artisan::call("migrate");
+        }
+
+        return back()
+            ->with('success_message', 'App scaffolded');
+    }
 
     /**
      * Get the request's data from the request.
@@ -223,7 +255,7 @@ class GeneratorTablesController extends Controller
             'with_migration' => 'boolean|nullable',
             'with_form_request' => 'boolean|nullable',
             'with_soft_delete' => 'boolean|nullable',
-            'models_per_page' => 'numeric|min:-99999999999.99|max:99999999999.99|nullable',
+            'models_per_page' => 'numeric|min:1|max:9999|nullable',
             'translation_for' => 'string|min:1|nullable',
             'primary_key' => 'string|min:1|nullable',
         ];
