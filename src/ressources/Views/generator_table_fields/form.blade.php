@@ -3,7 +3,7 @@
     <div class="col-md-10">
         <input class="form-control" name="name" type="text" id="name"
             value="{{ old('name', optional($generatorTableField)->name) }}" minlength="1" maxlength="255"
-            placeholder="Entrer name ici...">
+            placeholder="">
         {!! $errors->first('name', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -13,7 +13,7 @@
     <div class="col-md-10">
         <input class="form-control" name="labels" type="text" id="labels"
             value="{{ old('labels', optional($generatorTableField)->labels) }}" minlength="1" maxlength="255"
-            placeholder="Entrer labels ici...">
+            placeholder="">
         {!! $errors->first('labels', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -23,7 +23,7 @@
     <div class="col-md-10">
         <input class="form-control" name="placeholder" type="text" id="placeholder"
             value="{{ old('placeholder', optional($generatorTableField)->placeholder) }}" minlength="1"
-            placeholder="Entrer placeholder ici...">
+            placeholder="">
         {!! $errors->first('placeholder', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -33,7 +33,7 @@
     <div class="col-md-10">
         <input class="form-control" name="validation" type="text" id="validation"
             value="{{ old('validation', optional($generatorTableField)->validation) }}" minlength="1"
-            placeholder="Entrer validation ici...">
+            placeholder="">
         {!! $errors->first('validation', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -74,7 +74,7 @@
         <select class="form-control" id="data_type" name="data_type">
             <option value="" style="display: none;"
                 {{ old('data_type', optional($generatorTableField)->data_type ?: '') == '' ? 'selected' : '' }} disabled
-                selected>Selectionner le type de donnée</option>
+                selected>Select data type</option>
             @foreach ([
             'char' => 'Char',
             'date' => 'Date',
@@ -139,7 +139,7 @@
     <div class="col-md-10">
         <input class="form-control" name="data_type_params" type="text" id="data_type_params"
             value="{{ old('data_type_params', optional($generatorTableField)->data_type_params) }}" minlength="1"
-            placeholder="Entrer data type params ici...">
+            placeholder="">
         {!! $errors->first('data_type_params', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -149,7 +149,7 @@
     <div class="col-md-10">
         <input class="form-control" name="options" type="text" id="options"
             value="{{ old('options', optional($generatorTableField)->options) }}" minlength="1"
-            placeholder="Entrer options ici...">
+            placeholder="">
         {!! $errors->first('options', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -159,7 +159,7 @@
     <div class="col-md-10">
         <input class="form-control" name="date_format" type="text" id="date_format"
             value="{{ old('date_format', optional($generatorTableField)->date_format) }}"
-            placeholder="Entrer date format ici...">
+            placeholder="">
         {!! $errors->first('date_format', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -169,7 +169,7 @@
     <div class="col-md-10">
         <input class="form-control" name="html_value" type="text" id="html_value"
             value="{{ old('html_value', optional($generatorTableField)->html_value) }}" minlength="1"
-            placeholder="Entrer html value ici...">
+            placeholder="">
         {!! $errors->first('html_value', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -179,7 +179,7 @@
     <div class="col-md-10">
         <input class="form-control" name="css_class" type="text" id="css_class"
             value="{{ old('css_class', optional($generatorTableField)->css_class) }}" minlength="1"
-            placeholder="Entrer css class ici...">
+            placeholder="">
         {!! $errors->first('css_class', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
@@ -189,205 +189,20 @@
     <div class="col-md-10">
         <input class="form-control" name="data_value" type="text" id="data_value"
             value="{{ old('data_value', optional($generatorTableField)->data_value) }}" minlength="1"
-            placeholder="Entrer data value ici...">
+            placeholder="">
         {!! $errors->first('data_value', '<p class="help-block">:message</p>') !!}
     </div>
 </div>
 
-{{--
-<div class="form-group {{ $errors->has('is_inline_options') ? 'has-error' : '' }}">
-    <label for="is_inline_options" class="col-md-2 control-label">Is Inline Options</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_inline_options_1">
-                <input id="is_inline_options_1" class="" name="is_inline_options" type="checkbox" value="1"
-                    {{ old('is_inline_options', optional($generatorTableField)->is_inline_options) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_inline_options', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_on_index') ? 'has-error' : '' }}">
-    <label for="is_on_index" class="col-md-2 control-label">Is On Index</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_on_index_1">
-                <input id="is_on_index_1" class="" name="is_on_index" type="checkbox" value="1"
-                    {{ old('is_on_index', optional($generatorTableField)->is_on_index) == '1' ? 'checked' : '' }}
-                    @if(!isset($generatorTableField)) checked @endif>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_on_index', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_on_form') ? 'has-error' : '' }}">
-    <label for="is_on_form" class="col-md-2 control-label">Is On Form</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_on_form_1">
-                <input id="is_on_form_1" class="" name="is_on_form" type="checkbox" value="1"
-                    {{ old('is_on_form', optional($generatorTableField)->is_on_form) == '1' ? 'checked' : '' }}
-                    @if(!isset($generatorTableField)) checked @endif>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_on_form', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_on_show') ? 'has-error' : '' }}">
-    <label for="is_on_show" class="col-md-2 control-label">Is On Show</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_on_show_1">
-                <input id="is_on_show_1" class="" name="is_on_show" type="checkbox" value="1"
-                    {{ old('is_on_show', optional($generatorTableField)->is_on_show) == '1' ? 'checked' : '' }}
-                    @if(!isset($generatorTableField)) checked @endif>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_on_show', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_on_views') ? 'has-error' : '' }}">
-    <label for="is_on_views" class="col-md-2 control-label">Is On Views</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_on_views_1">
-                <input id="is_on_views_1" class="" name="is_on_views" type="checkbox" value="1"
-                    {{ old('is_on_views', optional($generatorTableField)->is_on_views) == '1' ? 'checked' : '' }}
-                    @if(!isset($generatorTableField)) checked @endif>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_on_views', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_header') ? 'has-error' : '' }}">
-    <label for="is_header" class="col-md-2 control-label">Is Header</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_header_1">
-                <input id="is_header_1" class="" name="is_header" type="checkbox" value="1"
-                    {{ old('is_header', optional($generatorTableField)->is_header) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_header', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_auto_increment') ? 'has-error' : '' }}">
-    <label for="is_auto_increment" class="col-md-2 control-label">Is Auto Increment</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_auto_increment_1">
-                <input id="is_auto_increment_1" class="" name="is_auto_increment" type="checkbox" value="1"
-                    {{ old('is_auto_increment', optional($generatorTableField)->is_auto_increment) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_auto_increment', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_primary') ? 'has-error' : '' }}">
-    <label for="is_primary" class="col-md-2 control-label">Is Primary</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_primary_1">
-                <input id="is_primary_1" class="" name="is_primary" type="checkbox" value="1"
-                    {{ old('is_primary', optional($generatorTableField)->is_primary) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_primary', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_index') ? 'has-error' : '' }}">
-    <label for="is_index" class="col-md-2 control-label">Is Index</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_index_1">
-                <input id="is_index_1" class="" name="is_index" type="checkbox" value="1"
-                    {{ old('is_index', optional($generatorTableField)->is_index) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_index', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_unique') ? 'has-error' : '' }}">
-    <label for="is_unique" class="col-md-2 control-label">Is Unique</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_unique_1">
-                <input id="is_unique_1" class="" name="is_unique" type="checkbox" value="1"
-                    {{ old('is_unique', optional($generatorTableField)->is_unique) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_unique', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_nullable') ? 'has-error' : '' }}">
-    <label for="is_nullable" class="col-md-2 control-label">Is Nullable</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_nullable_1">
-                <input id="is_nullable_1" class="" name="is_nullable" type="checkbox" value="1"
-                    {{ old('is_nullable', optional($generatorTableField)->is_nullable) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_nullable', '<p class="help-block">:message</p>') !!}
-    </div>
-</div>
-
-<div class="form-group {{ $errors->has('is_unsigned') ? 'has-error' : '' }}">
-    <label for="is_unsigned" class="col-md-2 control-label">Is Unsigned</label>
-    <div class="col-md-10">
-        <div class="checkbox">
-            <label for="is_unsigned_1">
-                <input id="is_unsigned_1" class="" name="is_unsigned" type="checkbox" value="1"
-                    {{ old('is_unsigned', optional($generatorTableField)->is_unsigned) == '1' ? 'checked' : '' }}>
-                Yes
-            </label>
-        </div>
-
-        {!! $errors->first('is_unsigned', '<p class="help-block">:message</p>') !!}
-    </div>
-</div> --}}
-
 @if($tableId == 0)
 
 <div class="form-group {{ $errors->has('generator_table_id') ? 'has-error' : '' }}">
-    <label for="generator_table_id" class="col-md-2 control-label">Generator Table</label>
+    <label for="generator_table_id" class="col-md-2 control-label">Table Model</label>
     <div class="col-md-10">
         <select class="form-control" id="generator_table_id" name="generator_table_id">
             <option value="" style="display: none;"
                 {{ old('generator_table_id', optional($generatorTableField)->generator_table_id ?: '') == '' ? 'selected' : '' }}
-                disabled selected>Selectionner generator table</option>
+                disabled selected>Select table model</option>
             @foreach ($generatorTables as $key => $generatorTable)
             <option value="{{ $key }}"
                 {{ old('generator_table_id', optional($generatorTableField)->generator_table_id) == $key ? 'selected' : '' }}>

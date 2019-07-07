@@ -7,7 +7,13 @@
         <div class="panel-heading clearfix">
 
             <span class="pull-left">
-                <h4 class="mt-5 mb-5">{{$table}} ==> Ajouter un champ</h4>
+                <h4 class="mt-5 mb-5">
+                    <a href="{{route('generator_tables.generator_table.index')}}">Tables </a>
+                    <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i>
+                    {{$table}}
+                    <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i>
+                    Add field
+                </h4>
             </span>
 
             <div class="btn-group btn-group-sm pull-right" role="group">

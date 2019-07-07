@@ -7,7 +7,14 @@
         <div class="panel-heading clearfix">
 
             <div class="pull-left">
-                <h4 class="mt-5 mb-5">{{$table}} ==> {{ !empty($generatorTableField->name) ? $generatorTableField->name : 'Generator Table Field' }} ==> Edition</h4>
+                <h4 class="mt-5 mb-5">
+                    <a href="{{route('generator_tables.generator_table.index')}}">Tables </a>
+                    <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i>
+                    {{$table}}
+                    <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i>
+                    {{ !empty($generatorTableField->name) ? $generatorTableField->name : 'Generator Table Field' }}
+                    <i style="color:#ddd;" class="glyphicon glyphicon-arrow-right"></i> Edition
+                </h4>
             </div>
             <div class="btn-group btn-group-sm pull-right" role="group">
 

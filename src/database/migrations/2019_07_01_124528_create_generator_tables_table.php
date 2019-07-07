@@ -21,7 +21,7 @@ class CreateGeneratorTablesTable extends Migration
             $table->boolean('with_migration')->nullable();
             $table->boolean('with_form_request')->nullable();
             $table->boolean('with_soft_delete')->nullable();
-            $table->decimal('models_per_page', 13,2)->nullable();
+            $table->integer('models_per_page')->nullable();
             $table->string('translation_for')->nullable();
             $table->string('primary_key')->nullable();
 

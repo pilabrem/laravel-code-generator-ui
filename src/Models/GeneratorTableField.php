@@ -28,6 +28,7 @@ class GeneratorTableField extends Model
      * @var array
      */
     protected $fillable = [
+                  'id',
                   'name',
                   'labels',
                   'validation',

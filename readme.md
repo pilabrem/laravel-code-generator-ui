@@ -1,3 +1,5 @@
+
+
 ## Introduction
 
 User interface to help developpers with laravel-code-generator commands.
@@ -22,8 +24,8 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     - Enter attribute Html Type (default: text)
     - Enter attribute database data type (default: string)
     - Enter attribute Data Type Params (optional)
-    - Enter attribute Options for select, radio, checkbox, ... (optional)
-    - Enter attribute Date format (optional)
+    - Enter attribute Options: for select, radio, checkbox, ... (optional)
+    - Enter attribute Date format: for Date, Datetime and DateTimeTz (optional)
     - Enter attribute Html Value (optional)
     - Enter attribute CSS class (optional)
     - Enter attribute Data value (optional)
@@ -39,7 +41,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 2. To download the required package into your laravel project, use the command-line to execute the following command
 
 	```
-	composer require crestapps/laravel-code-generator --dev
+	composer require crestapps/laravel-code-generator:v2.3.x-dev --dev
 	```
 
 3. If don't have a layout, you can create one for your project with this command
@@ -85,7 +87,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     - Translations (optional)
 
         Exemples: en,fr
-    - Primary key if the primary key is not the id attribute (optional)
+    - Primary key if the primary key is not the id attribute that is added by default (optional)
 
 2. Manage tables models attributes
 
@@ -116,7 +118,7 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
     - Enter attribute CSS class (optional)
     - Enter attribute Data value (optional)
 
-    > PS: It's not allowed to use one of the following symbols in input:
+    >> PS: It's not allowed to use one of the following symbols in input:
 
         ; : ,
         
