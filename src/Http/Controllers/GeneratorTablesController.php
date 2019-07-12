@@ -76,7 +76,10 @@ class GeneratorTablesController extends Controller
         $data = $this->getData($request);
         $table = GeneratorTable::create($data);
 
-        $this->saveNewFields($table->id, $request);
+        // Table model has at least 1 field
+        if (isset($request->field_name)) {
+            $this->saveNewFields($table->id, $request);
+        }
 
         return redirect()->route('generator_tables.generator_table.index')
             ->with('success_message', 'Table Model saved');
@@ -125,7 +128,10 @@ class GeneratorTablesController extends Controller
         $generatorTable = GeneratorTable::findOrFail($id);
         $generatorTable->update($data);
 
-        $this->saveNewFields($generatorTable->id, $request);
+        // Table model has at least 1 field
+        if (isset($request->field_name)) {
+            $this->saveNewFields($generatorTable->id, $request);
+        }
 
         return redirect()->route('generator_tables.generator_table.index')
             ->with('success_message', 'Table model updated successfully!');

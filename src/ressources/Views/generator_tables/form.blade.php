@@ -107,59 +107,61 @@
         </thead>
         <tbody id="container" class="no-border-x no-border-y ui-sortable">
             @isset($generatorTableFields)
-                @foreach ($generatorTableFields as $generatorTableField)
-                <tr class="form-inline">
-                    <td>
-                        <input type="hidden" name="id[]" value="{{old('id', optional($generatorTableField)->id)}}">
-                        <input type="text" name="field_name[]" style="width: 100%"
-                            value="{{old('field_name', optional($generatorTableField)->name)}}" class="form-control"
-                            required>
-                    </td>
-                    <td>
-                        <input type="text" name="labels[]" {{old('labels', optional($generatorTableField)->labels)}}
-                            style="width: 100%" class="form-control">
-                    </td>
-                    <td>
-                        <input type="text" name="placeholder[]"
-                            {{old('placeholder', optional($generatorTableField)->placeholder)}} style="width: 100%"
-                            class="form-control">
-                    </td>
-                    <td>
-                        <select class="form-control data_type" id="data_type" name="data_type[]" style="width:70%">
-                            @foreach ($dataTypes as $key => $text)
-                            <option value="{{ $key }}"
-                                {{ old('data_type', optional($generatorTableField)->data_type) == $key ? 'selected' : '' }}>
-                                {{ $text }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <input type="text" name="data_type_params[]"
-                            {{old('data_type_params', optional($generatorTableField)->data_type_params)}}
-                            style="width: 28%" class="form-control" placeholder="Size: Ex. 20">
-                        <input type='text' name='date_format[]'
-                            {{old('date_format', optional($generatorTableField)->date_format)}} class='form-control'
-                            style='width: 28%' class='form-control' placeholder='Ex. Y-m-d'>
-                    </td>
-                    <td>
-                        <select class="form-control html_type" id="html_type" name="html_type[]" style="width: 100%">
-                            @foreach ($htmlTypes as $key => $text)
-                            <option value="{{ $key }}"
-                                {{ old('html_type', optional($generatorTableField)->html_type) == $key ? 'selected' : '' }}>
-                                {{ $text }}
-                            </option>
-                            @endforeach
-                        </select>
-                        <input type="text" name="options[]" {{old('options', optional($generatorTableField)->options)}}
-                            style="width: 100%" class="form-control" placeholder="Ex. Male|Female">
-                    </td>
-                    <td>
-                        <input type="text" name="validation[]" style="width: 100%" class="form-control">
-                    </td>
-                    <td>
+            @foreach ($generatorTableFields as $generatorTableField)
+            <tr class="form-inline">
+                <td>
+                    <input type="hidden" name="id[]" value="{{old('id', optional($generatorTableField)->id)}}">
+                    <input type="text" name="field_name[]" style="width: 100%"
+                        value="{{old('field_name', optional($generatorTableField)->name)}}" class="form-control"
+                        required>
+                </td>
+                <td>
+                    <input type="text" name="labels[]" style="width: 100%" class="form-control"
+                        value="{{old('labels', optional($generatorTableField)->labels)}}">
+                </td>
+                <td>
+                    <input type="text" name="placeholder[]"
+                        value="{{old('placeholder', optional($generatorTableField)->placeholder)}}" style="width: 100%"
+                        class="form-control">
+                </td>
+                <td>
+                    <select class="form-control data_type" id="data_type" name="data_type[]" style="width:70%">
+                        @foreach ($dataTypes as $key => $text)
+                        <option value="{{ $key }}"
+                            {{ old('data_type', optional($generatorTableField)->data_type) == $key ? 'selected' : '' }}>
+                            {{ $text }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <input type="text" name="data_type_params[]"
+                        value="{{old('data_type_params', optional($generatorTableField)->data_type_params)}}"
+                        style="width: 28%" class="form-control" placeholder="Size: Ex. 20">
+                    <input type='text' name='date_format[]'
+                        value="{{old('date_format', optional($generatorTableField)->date_format)}}" class='form-control'
+                        style='width: 28%' class='form-control' placeholder='Ex. Y-m-d'>
+                </td>
+                <td>
+                    <select class="form-control html_type" id="html_type" name="html_type[]" style="width: 100%">
+                        @foreach ($htmlTypes as $key => $text)
+                        <option value="{{ $key }}"
+                            {{ old('html_type', optional($generatorTableField)->html_type) == $key ? 'selected' : '' }}>
+                            {{ $text }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <input type="text" name="options[]"
+                        value="{{old('options', optional($generatorTableField)->options)}}" style="width: 100%"
+                        class="form-control" placeholder="Ex. Male|Female">
+                </td>
+                <td>
+                    <input type="text" name="validation[]" style="width: 100%" class="form-control"
+                        value="{{old('validation', optional($generatorTableField)->validation)}}">
+                </td>
+                <td>
 
-                    </td>
-                </tr>
-                @endforeach
+                </td>
+            </tr>
+            @endforeach
             @endisset
         </tbody>
     </table>
