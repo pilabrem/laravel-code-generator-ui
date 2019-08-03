@@ -9,8 +9,6 @@ use Exception;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTable;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTableField;
 use Illuminate\Support\Facades\Config;
-use Symfony\Component\Console\Output\Output;
-use Symfony\Component\Console\Output\OutputInterface;
 
 class GeneratorTableFieldsController extends Controller
 {
