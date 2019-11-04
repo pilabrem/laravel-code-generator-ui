@@ -13,11 +13,9 @@
         "Pilabre Mikaila", "pilabrem"
     ],
     "require": {
-        "laravel/framework": "~5.8",
-        "crestapps/laravel-code-generator": "~2.4"
+        "laravel/framework": "~5.8"
     },
     "require-dev": {
-        "laravel/framework": "~5.8",
         "crestapps/laravel-code-generator": "~2.4"
     },
     "autoload": {
