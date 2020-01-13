@@ -178,6 +178,12 @@ class GeneratorTableFieldsController extends Controller
 
         // Add --fields param
         $cmd .= ' --fields="' . $fieldsParams . '" --force';
+
+        // Add translation option
+        if (isset($table->translation_for)) {
+            $cmd .= " --translation-for=" . $table->translation_for;
+        }
+
         $output = [];
         $exitCode = Artisan::call($cmd, [], $output);
 
