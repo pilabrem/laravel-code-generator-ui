@@ -14,11 +14,9 @@
     ],
     "require": {
         "laravel/framework": ">=5.8",
-        "wikimedia/composer-merge-plugin": "dev-master"
-    },
-    "require-dev": {
         "crestapps/laravel-code-generator": ">=2.2"
     },
+    "require-dev": {},
     "autoload": {
         "psr-4": {
             "Pilabrem\\CodeGeneratorUI\\": "src/"
@@ -35,18 +33,6 @@
             "providers": [
                 "Pilabrem\\CodeGeneratorUI\\CodeGeneratorUiServiceProvider"
             ]
-        },
-        "merge-plugin": {
-            "include": [
-                "composer.json"
-            ],
-            "recurse": true,
-            "replace": false,
-            "ignore-duplicates": false,
-            "merge-dev": true,
-            "merge-extra": false,
-            "merge-extra-deep": false,
-            "merge-scripts": false
         }
     }
 }
