@@ -34,6 +34,18 @@
             "providers": [
                 "Pilabrem\\CodeGeneratorUI\\CodeGeneratorUiServiceProvider"
             ]
+        },
+        "merge-plugin": {
+            "include": [
+                "vendor/laravel/framework/composer.json"
+            ],
+            "recurse": true,
+            "replace": false,
+            "ignore-duplicates": false,
+            "merge-dev": true,
+            "merge-extra": false,
+            "merge-extra-deep": false,
+            "merge-scripts": false
         }
     }
 }
