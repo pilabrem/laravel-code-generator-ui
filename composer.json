@@ -13,7 +13,8 @@
         "Pilabre Mikaila", "pilabrem"
     ],
     "require": {
-        "laravel/framework": ">=5.8"
+        "laravel/framework": ">=5.8",
+        "wikimedia/composer-merge-plugin": "dev-master"
     },
     "require-dev": {
         "crestapps/laravel-code-generator": ">=2.2"
@@ -37,7 +38,7 @@
         },
         "merge-plugin": {
             "include": [
-                "vendor/laravel/framework/composer.json"
+                "composer.json"
             ],
             "recurse": true,
             "replace": false,
