@@ -2,21 +2,21 @@
     "name": "pilabrem/laravel-code-generator-ui",
     "description": "User interface to help developpers with laravel-code-generator commands",
     "keywords": [
-        "laravel","crud","crud generator",
-        "laravel crud generator","laravel crud builder",
-        "crud builder","views creator","routes creator",
-        "controller creator","code generator","generators","generator",
-        "laravel crud","laravel code generator", "generator ui",
+        "laravel", "crud", "crud generator",
+        "laravel crud generator", "laravel crud builder",
+        "crud builder", "views creator", "routes creator",
+        "controller creator", "code generator", "generators", "generator",
+        "laravel crud", "laravel code generator", "generator ui",
         "code generator ui", "laravel code generator ui",
-        "laravel-code-generator","code-generator","CrestApps",
-        "Alhayek", "Mike Alhayek","Majd Alhayek", "pilabre", "Mikaila",
+        "laravel-code-generator", "code-generator", "CrestApps",
+        "Alhayek", "Mike Alhayek", "Majd Alhayek", "pilabre", "Mikaila",
         "Pilabre Mikaila", "pilabrem"
     ],
     "require": {
-        "laravel/framework": "~5.8"
+        "laravel/framework": ">=5.8"
     },
     "require-dev": {
-        "crestapps/laravel-code-generator": "~2.4"
+        "crestapps/laravel-code-generator": ">=2.2"
     },
     "autoload": {
         "psr-4": {
@@ -24,12 +24,10 @@
         }
     },
     "license": "MIT",
-    "authors": [
-        {
-            "name": "pilabrem",
-            "email": "pilabrem@gmail.com"
-        }
-    ],
+    "authors": [{
+        "name": "pilabrem",
+        "email": "pilabrem@gmail.com"
+    }],
 
     "extra": {
         "laravel": {
