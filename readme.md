@@ -54,7 +54,13 @@ With this package combined to [crestapps/laravel-code-generator](https://github.
 	    $this->app->register('Pilabrem\CodeGeneratorUI\CodeGeneratorUiServiceProvider');
 	```
 
-4. Now, you can migrate database
+4. Publish the package assets
+
+    ```
+    php artisan vendor:publish --provider="Pilabrem\CodeGeneratorUI\CodeGeneratorUiServiceProvider"
+    ```
+
+5. Now, you can migrate database
 
 	```
 	php artisan migrate

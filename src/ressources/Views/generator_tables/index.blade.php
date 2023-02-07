@@ -33,6 +33,10 @@
                 title="Add Table model">
                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
             </a>
+            <a href="{{ route('import_shema_from_xmls.import_shema_from_xml.create') }}" class="btn btn-primary"
+                title="Import Schema from xml">
+                <span class="glyphicon glyphicon-import" aria-hidden="true"></span>
+            </a>
             <a href="{{ route('generator_tables.generator_table.config') }}" class="btn btn-info"
                 title="Create resource file">
                 <span class="glyphicon glyphicon-flash" aria-hidden="true"> </span>

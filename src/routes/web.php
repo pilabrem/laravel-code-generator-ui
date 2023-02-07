@@ -61,3 +61,15 @@ Route::group([
         ->name('generator_tables.generator_table.resources');
 });
 
+
+
+Route::group([
+    'namespace' => 'Pilabrem\CodeGeneratorUI\Http\Controllers',
+    'prefix' => 'code-generator-ui/imports/shema_from_xmls',
+    'middleware' => 'web',
+], function () {
+    Route::get('/create', 'ImportShemaFromXMLsController@create')
+        ->name('import_shema_from_xmls.import_shema_from_xml.create');
+    Route::post('/', 'ImportShemaFromXMLsController@store')
+        ->name('import_shema_from_xmls.import_shema_from_xml.store');
+});
