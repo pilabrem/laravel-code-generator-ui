@@ -71,6 +71,7 @@ class ImportShemaFromXMLsController extends Controller
                 // Storing the references of the parent model
                 $xmlParentId = null;
                 $tableParentId = 0;
+                $tableParent = null;
                 // Loop through the elements
                 $nbElements = count($elements["mxCell"]);
                 for ($j = 0; $j < $nbElements; $j++) {
@@ -81,13 +82,17 @@ class ImportShemaFromXMLsController extends Controller
                         $xmlParentId = $el["id"] . ""; // Transform to string
                         $modelName = $el["value"];
                         // Create The table Model
-                        $table = GeneratorTable::create([
-                            "name" => $modelName,
+                        $table = GeneratorTable::firstOrCreate(
+                            ["name" => $modelName]
+                        );
+                        $table->update([
                             "with_migration" => true,
                             "with_form_request" => true,
                             "with_soft_delete" => true,
-                            "models_per_page" => 10
+                            "models_per_page" => 10,
+                            "translation_for" => "en, fr",
                         ]);
+                        $tableParent = $table;
                         $tableParentId = $table->id;
                     } else if ($this->diagramElIsTableField($el)) {
                         $fieldName = $el["value"] . "";
@@ -99,8 +104,15 @@ class ImportShemaFromXMLsController extends Controller
                             $fieldInfos = (array) $this->getFieldInfos($fieldName);
                             $fieldInfos["generator_table_id"] = $tableParentId;
                             // Save Table Field
+
+
                             if ($fieldInfos["name"] != "id") {  // Don't Save IDs
-                                GeneratorTableField::create($fieldInfos);
+                                $name = $fieldInfos["name"];
+                                unset($fieldInfos["name"]);
+                                $field = GeneratorTableField::firstOrCreate(
+                                    ["name" => $name, "generator_table_id" => $tableParentId]
+                                );
+                                $field->update($fieldInfos);
                             }
                         }
                     }
@@ -273,7 +285,7 @@ class ImportShemaFromXMLsController extends Controller
             'datetime' => "text",
             'timestamp' => "text"
         );
-        return isset($htmlTypes[$typeLower]) ? $htmlTypes[$typeLower] : $elType;
+        return isset($htmlTypes[$typeLower]) ? $htmlTypes[$typeLower] : "text";
     }
 
     // Get Data Type
@@ -300,7 +312,7 @@ class ImportShemaFromXMLsController extends Controller
             'timestamp' => "timestamp"
         );
 
-        return isset($htmlTypes[$typeLower]) ? $htmlTypes[$typeLower] : $elType;
+        return isset($htmlTypes[$typeLower]) ? $htmlTypes[$typeLower] : "biginteger";
     }
 
     public function hasFivesProps($el)
