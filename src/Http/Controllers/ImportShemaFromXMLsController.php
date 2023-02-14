@@ -51,7 +51,7 @@ class ImportShemaFromXMLsController extends Controller
      */
     public function store(Request $request)
     {
-        //try {
+        try {
 
             //dd($request->all());
             $data = $this->getData($request);
@@ -81,7 +81,13 @@ class ImportShemaFromXMLsController extends Controller
                         $xmlParentId = $el["id"] . ""; // Transform to string
                         $modelName = $el["value"];
                         // Create The table Model
-                        $table = GeneratorTable::create(["name" => $modelName]);
+                        $table = GeneratorTable::create([
+                            "name" => $modelName,
+                            "with_migration" => true,
+                            "with_form_request" => true,
+                            "with_soft_delete" => true,
+                            "models_per_page" => 10
+                        ]);
                         $tableParentId = $table->id;
                     } else if ($this->diagramElIsTableField($el)) {
                         $fieldName = $el["value"] . "";
@@ -103,11 +109,11 @@ class ImportShemaFromXMLsController extends Controller
 
             return redirect()->route('generator_tables.generator_table.index')
                 ->with('success_message', 'Shema importé avec succès');
-        /*} catch (Exception $exception) {
+        } catch (Exception $exception) {
 
             return back()->withInput()
                 ->withErrors(['unexpected_error' => 'Une erreur inconnue a été trouvée!']);
-        }*/
+        }
     }
 
 
@@ -182,7 +188,7 @@ class ImportShemaFromXMLsController extends Controller
         $fieldInfos = array(
             "name" => $name,
             "labels" => $this->nameToLabel($name),
-            "validation" => "",
+            "validation" => "required",
             "html_type" => $html_type,
             "options" => $this->getOptions($html_type, $typeParams),
             "data_type" => $data_type,
