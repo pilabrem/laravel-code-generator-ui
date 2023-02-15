@@ -90,7 +90,7 @@ class ImportShemaFromXMLsController extends Controller
                             "with_form_request" => true,
                             "with_soft_delete" => true,
                             "models_per_page" => 10,
-                            "translation_for" => "en, fr",
+                            "translation_for" => "en",
                         ]);
                         $tableParent = $table;
                         $tableParentId = $table->id;
@@ -104,7 +104,6 @@ class ImportShemaFromXMLsController extends Controller
                             $fieldInfos = (array) $this->getFieldInfos($fieldName);
                             $fieldInfos["generator_table_id"] = $tableParentId;
                             // Save Table Field
-
 
                             if ($fieldInfos["name"] != "id") {  // Don't Save IDs
                                 $name = $fieldInfos["name"];
