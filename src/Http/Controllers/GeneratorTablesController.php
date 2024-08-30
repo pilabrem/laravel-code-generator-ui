@@ -81,6 +81,31 @@ class GeneratorTablesController extends Controller
             $this->saveNewFields($table->id, $request);
         }
 
+
+        // Add the default fields to the table if they don't exist yet and if the config('laravel-code-generator.default_fields') exists and is not empty
+        if (config('laravel-code-generator.default_fields') && count(config('laravel-code-generator.default_fields')) > 0) {
+            $tableFields = GeneratorTableField::where('generator_table_id', $table->id)->get();
+            $tableFieldsNames = $tableFields->pluck('name')->toArray();
+            foreach (config('laravel-code-generator.default_fields') as $defaultField) {
+                if (!in_array($defaultField['name'], $tableFieldsNames)) {
+                    $fieldInfos = array(
+                        "name" => $defaultField['name'],
+                        "labels" => $defaultField['labels'] ?? $this->nameToLabel($defaultField['name']),
+                        "validation" => $defaultField['validation'] ?? "",
+                        "html_type" => $defaultField['html_type'] ?? "text",
+                        "options" => $defaultField['options'] ?? null,
+                        "data_type" => $defaultField['data_type'] ?? "string",
+                        "data_type_params" => $defaultField['data_type_params'] ?? null,
+                        "date_format" => $defaultField['date_format'] ?? null,
+                        "generator_table_id" => $table->id,
+                        "placeholder" => " "
+                    );
+                    GeneratorTableField::create($fieldInfos);
+                }
+            }
+        }
+
+
         return redirect()->route('generator_tables.generator_table.index')
             ->with('success_message', 'Table Model saved');
     }
@@ -183,7 +208,7 @@ class GeneratorTablesController extends Controller
                 $fieldArray = $field->toArray();
                 $excludeFields = ['id', 'created_at', 'updated_at', 'generator_table_id'];
 
-                if (strpos($field->name, '_id') !== false) {
+                if (strrpos($field->name, '_id') !== false && strrpos($field->name, '_id') == strlen($field->name) - 3) {
                     $fieldsParams .= $field->name;
                 } else {
                     foreach ($fieldArray as $key => $value) {
@@ -200,6 +225,7 @@ class GeneratorTablesController extends Controller
             }
             // Add --fields param
             $cmd .= ' --fields="' . $fieldsParams . '" --force';
+
 
             // Add translation option
             if (isset($table->translation_for)) {
