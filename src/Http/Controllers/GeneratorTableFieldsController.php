@@ -160,7 +160,8 @@ class GeneratorTableFieldsController extends Controller
             $fieldArray = $field->toArray();
             $excludeFields = ['id', 'created_at', 'updated_at', 'generator_table_id'];
 
-            if (strpos($field->name, '_id') !== false) {
+            // if field name ends with _id, it's a foreign key
+            if (strrpos($field->name, '_id') !== false && strrpos($field->name, '_id') == strlen($field->name) - 3) {
                 $fieldsParams .= $field->name;
             } else {
                 foreach ($fieldArray as $key => $value) {
