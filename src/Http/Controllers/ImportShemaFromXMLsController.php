@@ -1,16 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Pilabrem\CodeGeneratorUI\Http\Controllers;
 
-use URL;
-use Exception;
-use SimpleXMLElement;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Exception;
 use Gate;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTable;
 use Pilabrem\CodeGeneratorUI\Models\GeneratorTableField;
+use SimpleXMLElement;
+use URL;
 
 // Pilabrem
 class ImportShemaFromXMLsController extends Controller
@@ -25,15 +25,15 @@ class ImportShemaFromXMLsController extends Controller
 
         $this->middleware(function ($request, $next) {
             if (env('APP_ENV') !== 'local') {
-                return abort(403, "Non autorisée en mode production");
+                return abort(403, 'Non autorisée en mode production');
             }
 
-            abort_if(!Gate::allows('manage administrators'), 403, "Non autorisé");
+            abort_if(! Gate::allows('manage administrators'), 403, 'Non autorisé');
 
             view()->share('boutiqueGeree', null);
 
             $slug = request()->slug;
-            URL::defaults(['slug' => $slug ? $slug : "jsajdlsjldjsaldjlkjsljslkdj"]);
+            URL::defaults(['slug' => $slug ? $slug : 'jsajdlsjldjsaldjlkjsljslkdj']);
 
             view()->share('boutiqueGeree', null);
 
@@ -64,7 +64,6 @@ class ImportShemaFromXMLsController extends Controller
     /**
      * Store a new import shema from x m l in the storage.
      *
-     * @param \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\RedirectResponse | \Illuminate\Routing\Redirector
      */
@@ -73,9 +72,9 @@ class ImportShemaFromXMLsController extends Controller
         try {
             $data = $this->getData($request);
             // Get XML file content
-            $fileUrl = public_path("storage\\" . $data["fichier"]);
+            $fileUrl = public_path('storage\\'.$data['fichier']);
             $xml = new SimpleXMLElement($fileUrl, null, true);
-            $tables = array();
+            $tables = [];
 
             // Loop through pages in the diagram
             $nbPages = count($xml->diagram);
@@ -88,29 +87,29 @@ class ImportShemaFromXMLsController extends Controller
                 $xmlParentId = null;
                 $tableParentId = 0;
                 // Loop through the elements
-                $nbElements = count($elements["mxCell"]);
+                $nbElements = count($elements['mxCell']);
                 for ($j = 0; $j < $nbElements; $j++) {
-                    $el = $elements["mxCell"][$j];
+                    $el = $elements['mxCell'][$j];
 
                     // Is a table Model, save it
                     if ($this->diagramElIsTable($el)) {
-                        $xmlParentId = $el["id"] . ""; // Transform to string
-                        $modelName = $this->strip_attr_tags($el["value"]);
+                        $xmlParentId = $el['id'].''; // Transform to string
+                        $modelName = $this->strip_attr_tags($el['value']);
                         // Create The table Model
-                        $table = GeneratorTable::firstOrCreate(["name" => $modelName]);
+                        $table = GeneratorTable::firstOrCreate(['name' => $modelName]);
                         $tableParentId = $table->id;
                         $tables[] = $table;
-                    } else if ($this->diagramElIsTableField($el)) {
-                        $fieldName = $this->strip_attr_tags($el["value"]) . "";
-                        $elParentId = $el["parent"] . ""; // Transform to string
+                    } elseif ($this->diagramElIsTableField($el)) {
+                        $fieldName = $this->strip_attr_tags($el['value']).'';
+                        $elParentId = $el['parent'].''; // Transform to string
 
                         // Has parent table
                         if ($elParentId == $xmlParentId) {
                             // Get Field infos
                             $fieldInfos = (array) $this->getFieldInfos($fieldName);
-                            $fieldInfos["generator_table_id"] = $tableParentId;
+                            $fieldInfos['generator_table_id'] = $tableParentId;
                             // Save Table Field
-                            if ($fieldInfos["name"] != "id") {  // Don't Save IDs
+                            if ($fieldInfos['name'] != 'id') {  // Don't Save IDs
                                 GeneratorTableField::create($fieldInfos);
                             }
                         }
@@ -124,19 +123,19 @@ class ImportShemaFromXMLsController extends Controller
                     $tableFields = GeneratorTableField::where('generator_table_id', $table->id)->get();
                     $tableFieldsNames = $tableFields->pluck('name')->toArray();
                     foreach (config('laravel-code-generator.default_fields') as $defaultField) {
-                        if (!in_array($defaultField['name'], $tableFieldsNames)) {
-                            $fieldInfos = array(
-                                "name" => $defaultField['name'],
-                                "labels" => $defaultField['labels'] ?? $this->nameToLabel($defaultField['name']),
-                                "validation" => $defaultField['validation'] ?? "",
-                                "html_type" => $defaultField['html_type'] ?? "text",
-                                "options" => $defaultField['options'] ?? null,
-                                "data_type" => $defaultField['data_type'] ?? "string",
-                                "data_type_params" => $defaultField['data_type_params'] ?? null,
-                                "date_format" => $defaultField['date_format'] ?? null,
-                                "generator_table_id" => $table->id,
-                                "placeholder" => " "
-                            );
+                        if (! in_array($defaultField['name'], $tableFieldsNames)) {
+                            $fieldInfos = [
+                                'name' => $defaultField['name'],
+                                'labels' => $defaultField['labels'] ?? $this->nameToLabel($defaultField['name']),
+                                'validation' => $defaultField['validation'] ?? '',
+                                'html_type' => $defaultField['html_type'] ?? 'text',
+                                'options' => $defaultField['options'] ?? null,
+                                'data_type' => $defaultField['data_type'] ?? 'string',
+                                'data_type_params' => $defaultField['data_type_params'] ?? null,
+                                'date_format' => $defaultField['date_format'] ?? null,
+                                'generator_table_id' => $table->id,
+                                'placeholder' => ' ',
+                            ];
                             GeneratorTableField::create($fieldInfos);
                         }
                     }
@@ -157,20 +156,20 @@ class ImportShemaFromXMLsController extends Controller
      * If the value of the attribute is an HTML entity, it will be decoded before stripping tags.
      * Eg. <mxCell id="6CCQWgtzOiT5ZE1ZMl2y-9" value="&lt;code style=&quot;font-size: 12px;&quot;&gt;&lt;font face=&quot;Helvetica&quot; style=&quot;font-size: 12px;&quot;&gt;+ type_compte: String(dav, dat, entreprise)&lt;/font&gt;&lt;/code&gt;" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontFamily=Helvetica;fontSize=12;fontColor=default;labelBackgroundColor=none;" vertex="1" parent="6CCQWgtzOiT5ZE1ZMl2y-6">
      *
-     * @param string $attr_original The original attribute to strip tags from.
+     * @param  string  $attr_original  The original attribute to strip tags from.
      * @return string The attribute with tags stripped.
      */
     protected function strip_attr_tags($attr_original)
     {
         $decodedText = html_entity_decode($attr_original);
+
         return strip_tags($decodedText);
     }
-
 
     /**
      * Get the request's data from the request.
      *
-     * @param Illuminate\Http\Request\Request $request
+     * @param  Illuminate\Http\Request\Request  $request
      * @return array
      */
     protected function getData(Request $request)
@@ -189,28 +188,25 @@ class ImportShemaFromXMLsController extends Controller
             $data['fichier'] = $this->moveFile($request->file('fichier'));
         }
 
-
         return $data;
     }
 
     /**
      * Moves the attached file to the server.
      *
-     * @param Symfony\Component\HttpFoundation\File\UploadedFile $file
-     *
+     * @param  Symfony\Component\HttpFoundation\File\UploadedFile  $file
      * @return string
      */
     protected function moveFile($file)
     {
-        if (!$file->isValid()) {
+        if (! $file->isValid()) {
             return '';
         }
 
-        $saved = $file->store("public");
+        $saved = $file->store('public');
 
         return substr($saved, 7);
     }
-
 
     /**
      * Get all informations of a field
@@ -220,7 +216,7 @@ class ImportShemaFromXMLsController extends Controller
      */
     public function getFieldInfos($field)
     {
-        $matches = array();
+        $matches = [];
         $s = preg_match('#^[+-] ?(\w+) ?\: ?([a-zA-Z_]+) ?\(?#', $field, $matches);
 
         // Get Field Name
@@ -231,22 +227,21 @@ class ImportShemaFromXMLsController extends Controller
         $s = preg_match('# ?\( ?([\w,;\- ]+) ?\)#', $field, $matches);
         $typeParams = isset($matches[1]) ? $matches[1] : null;
 
-
         $html_type = $this->getHtmlType($type, $typeParams);
         $data_type = $this->getDataType($type);
 
-        $fieldInfos = array(
-            "name" => $name,
-            "labels" => $this->nameToLabel($name),
-            "validation" => "",
-            "html_type" => $html_type,
-            "options" => $this->getOptions($html_type, $typeParams),
-            "data_type" => $data_type,
-            "data_type_params" => $this->getDataTypeParams($data_type, $typeParams),
-            "date_format" => $this->getDateFormat($data_type, $typeParams),
-            "is_inline_options" => $this->getIsInlineOptions($html_type, $typeParams),
-            "placeholder" => " "
-        );
+        $fieldInfos = [
+            'name' => $name,
+            'labels' => $this->nameToLabel($name),
+            'validation' => '',
+            'html_type' => $html_type,
+            'options' => $this->getOptions($html_type, $typeParams),
+            'data_type' => $data_type,
+            'data_type_params' => $this->getDataTypeParams($data_type, $typeParams),
+            'date_format' => $this->getDateFormat($data_type, $typeParams),
+            'is_inline_options' => $this->getIsInlineOptions($html_type, $typeParams),
+            'placeholder' => ' ',
+        ];
 
         return $fieldInfos;
     }
@@ -267,7 +262,7 @@ class ImportShemaFromXMLsController extends Controller
             return null;
         }
 
-        if (in_array($htmlType, array("radio", "checkbox", "select", "multipleSelect"))) {
+        if (in_array($htmlType, ['radio', 'checkbox', 'select', 'multipleSelect'])) {
             return str_replace(' ', '', str_replace(',', '|', $typeParams));
         }
 
@@ -278,17 +273,17 @@ class ImportShemaFromXMLsController extends Controller
     public function getIsInlineOptions($htmlType, $typeParams)
     {
         if ($typeParams == null) {
-            return "false";
+            return 'false';
         }
 
-        if (in_array($htmlType, array("radio", "checkbox"))) {
+        if (in_array($htmlType, ['radio', 'checkbox'])) {
             // Check if the typeParams contains less than 3 commas, return true, else false
             if (substr_count($typeParams, ',') < 3 || substr_count($typeParams, '|') < 3) {
-                return "true";
+                return 'true';
             }
         }
 
-        return "false";
+        return 'false';
     }
 
     // Get Data Type Params
@@ -298,7 +293,7 @@ class ImportShemaFromXMLsController extends Controller
             return null;
         }
 
-        if (in_array($dataType, array('char', 'varchar'))) {
+        if (in_array($dataType, ['char', 'varchar'])) {
             return $typeParams;
         }
 
@@ -317,14 +312,14 @@ class ImportShemaFromXMLsController extends Controller
                 return 'Y-m-d';
             }
 
-            if (in_array($dataType, array('date', 'datetime', 'datetimetz'))) {
+            if (in_array($dataType, ['date', 'datetime', 'datetimetz'])) {
                 return 'Y-m-d H:i:s';
             }
 
             return null;
         }
 
-        if (in_array($dataType, array('date', 'datetime', 'datetimetz'))) {
+        if (in_array($dataType, ['date', 'datetime', 'datetimetz'])) {
             return $typeParams;
         }
 
@@ -335,26 +330,26 @@ class ImportShemaFromXMLsController extends Controller
     public function getHtmlType($elType, $typeParams)
     {
         $typeLower = mb_strtolower($elType);
-        $htmlTypes = array(
-            'string' => "text",
-            'int' => "number",
-            'integer' => "number",
-            'bigint' => "number",
-            'biginteger' => "number",
-            'number' => "number",
-            'boolean' => "checkbox",
-            'bool' => "checkbox",
-            'double' => "text",
-            'text' => "textarea",
-            'texte' => "textarea",
-            'file' => "file",
-            'enum' => "select",
-            'date' => "text",
-            'datetime' => "text",
-            'timestamp' => "text"
-        );
+        $htmlTypes = [
+            'string' => 'text',
+            'int' => 'number',
+            'integer' => 'number',
+            'bigint' => 'number',
+            'biginteger' => 'number',
+            'number' => 'number',
+            'boolean' => 'checkbox',
+            'bool' => 'checkbox',
+            'double' => 'text',
+            'text' => 'textarea',
+            'texte' => 'textarea',
+            'file' => 'file',
+            'enum' => 'select',
+            'date' => 'text',
+            'datetime' => 'text',
+            'timestamp' => 'text',
+        ];
 
-        if ($typeLower == "string" && $typeParams != null) {
+        if ($typeLower == 'string' && $typeParams != null) {
             return $this->getStringHtmlType($typeParams);
         }
 
@@ -364,33 +359,34 @@ class ImportShemaFromXMLsController extends Controller
     /**
      * Get the HTML input type based on the given type and type parameters.
      *
-     * @param string $type The type of the input.
-     * @param string|null $typeParams The parameters associated with the input type.
+     * @param  string  $type  The type of the input.
+     * @param  string|null  $typeParams  The parameters associated with the input type.
      * @return string The HTML input type.
      */
     protected function getStringHtmlType($typeParams)
     {
         if ($typeParams == null) {
-            return "text";
+            return 'text';
         }
 
         // Check if the typeParams does not contain a ";" or ",", then it is a text
         if (Str::contains($typeParams, ',') || Str::contains($typeParams, '|')) {
             // Check if the typeParams contains less than 3 commas, then it is a radio, else it is a select
             if (substr_count($typeParams, ',') < 3 || substr_count($typeParams, '|') < 3) {
-                return "radio";
+                return 'radio';
             }
-            return "select";
+
+            return 'select';
         }
 
-        return "text";
+        return 'text';
     }
 
     /**
      * Get the size of a string based on the given type and type parameters.
      *
-     * @param mixed $type The type of the string.
-     * @param mixed $typeParams The parameters associated with the type.
+     * @param  mixed  $type  The type of the string.
+     * @param  mixed  $typeParams  The parameters associated with the type.
      * @return int|null The size of the string if it is numeric, otherwise null.
      */
     protected function getStringSize($typeParams)
@@ -407,34 +403,35 @@ class ImportShemaFromXMLsController extends Controller
     public function getDataType($elType)
     {
         $typeLower = mb_strtolower($elType);
-        $htmlTypes = array(
-            'string' => "string",
-            'int' => "int",
-            'integer' => "integer",
-            'bigint' => "bigint",
-            'biginteger' => "biginteger",
-            'decimal' => "decimal",
-            'number' => "int",
-            'bool' => "bool",
-            'boolean' => "boolean",
-            'double' => "double",
-            'text' => "text",
-            'texte' => "text",
-            'file' => "string",
-            'enum' => "enum",
-            'date' => "date",
-            'datetime' => "datetime",
-            'timestamp' => "timestamp"
-        );
+        $htmlTypes = [
+            'string' => 'string',
+            'int' => 'int',
+            'integer' => 'integer',
+            'bigint' => 'bigint',
+            'biginteger' => 'biginteger',
+            'decimal' => 'decimal',
+            'number' => 'int',
+            'bool' => 'bool',
+            'boolean' => 'boolean',
+            'double' => 'double',
+            'text' => 'text',
+            'texte' => 'text',
+            'file' => 'string',
+            'enum' => 'enum',
+            'date' => 'date',
+            'datetime' => 'datetime',
+            'timestamp' => 'timestamp',
+        ];
 
         return isset($htmlTypes[$typeLower]) ? $htmlTypes[$typeLower] : $elType;
     }
 
     public function hasFivesProps($el)
     {
-        if ($el["id"] != null && $el["value"] != null && $el["style"] != null && $el["parent"] != null && $el["vertex"] != null) {
+        if ($el['id'] != null && $el['value'] != null && $el['style'] != null && $el['parent'] != null && $el['vertex'] != null) {
             return true;
         }
+
         return false;
     }
 
@@ -442,9 +439,9 @@ class ImportShemaFromXMLsController extends Controller
     public function diagramElIsTable($el)
     {
         if ($this->hasFivesProps($el)) {
-            $style = $el["style"];
-            $type = substr($style, 0, strpos($style, ";"));
-            if ($type === "swimlane") {
+            $style = $el['style'];
+            $type = substr($style, 0, strpos($style, ';'));
+            if ($type === 'swimlane') {
                 return true;
             }
         }
@@ -456,17 +453,17 @@ class ImportShemaFromXMLsController extends Controller
     public function diagramElIsTableField($el)
     {
         if ($this->hasFivesProps($el)) {
-            $name = $this->strip_attr_tags($el["value"]) . "";
+            $name = $this->strip_attr_tags($el['value']).'';
             // Ne pas prendre en compte les IDs
-            if ($name == "id") {
+            if ($name == 'id') {
                 return false;
             }
 
-            $style = $el["style"];
-            $type = substr($style, 0, strpos($style, ";"));
-            if ($type === "text") {
+            $style = $el['style'];
+            $type = substr($style, 0, strpos($style, ';'));
+            if ($type === 'text') {
                 // If the name contains "):" or ") :" then it is a method. return false
-                if (Str::contains($name, "):") || Str::contains($name, ") :")) {
+                if (Str::contains($name, '):') || Str::contains($name, ') :')) {
                     return false;
                 }
 
